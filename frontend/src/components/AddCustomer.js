@@ -11,17 +11,21 @@ const AddCustomer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(""); 
+    setMessage(""); // Reset message before request
 
     try {
       const response = await axios.put(`${API_URL}/customer`, { id: customerId });
       setMessage("Customer ID added successfully!");
       setAlertType("success");
     } catch (error) {
+      if (error.response && error.response.data) {
+        // Récupère l'erreur envoyée par le backend
+        setMessage(error.response.data.error || "An unknown error occurred.");
+      } else {
         setMessage("Error adding customer ID. Please try again.");
-        setAlertType("danger");
       }
-    
+      setAlertType("danger");
+    }
   };
 
   return (
